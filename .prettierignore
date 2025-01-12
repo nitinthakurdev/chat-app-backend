@@ -1,0 +1,19 @@
+# Node modules folder
+node_modules/
+
+# Build output directory
+dist/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Coverage and test output
+coverage/
+
+# Ignore compiled JavaScript files
+*.js
+
+# Ignore specific directories
+# scripts/
+# src/generated/

@@ -1,0 +1,35 @@
+
+{
+  "compilerOptions": {
+    "target": "ES2022", // Use modern JavaScript features
+    "module": "ESNext", // Module system suitable for Node.js
+    "strict": true, // Enable all strict type checking options
+    "noImplicitAny": true, // Raise errors for variables with an implied `any` type
+    "strictNullChecks": true, // Ensure `null` and `undefined` are handled explicitly
+    "strictFunctionTypes": true, // Ensure function parameters and return types are checked
+    "strictBindCallApply": true, // Check type safety for `bind`, `call`, and `apply`
+    "noImplicitThis": true, // Disallow `this` implicitly being `any`
+    "alwaysStrict": true, // Ensure `use strict` is emitted in generated JS
+    "noUnusedLocals": true, // Report unused local variables
+    "noUnusedParameters": true, // Report unused parameters
+    "noImplicitReturns": true, // Ensure all code paths in a function return a value
+    "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statements
+    "esModuleInterop": true, // Allow import/export compatibility with CommonJS
+    "skipLibCheck": true, // Skip type checking for declaration files for faster builds
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file imports
+    "resolveJsonModule": true, // Allow importing `.json` files
+    "outDir": "./build",
+    "baseUrl": ".", // Specify output directory
+    "rootDir": "./src", // Specify root directory of input files
+    "typeRoots": ["./node_modules/@types"], // Specify type definition folders to include
+    "moduleResolution": "node", // Resolve modules in Node.js style
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules without default exports
+    "isolatedModules": true ,// Ensure each file can be transpiled without referencing others
+    "paths": {
+      "@/*":["src/*"]
+    }
+  },
+  "include": ["src/**/*"], // Include all TypeScript files in the `src` directory
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts"] // Exclude test files and `node_modules`
+}
+
