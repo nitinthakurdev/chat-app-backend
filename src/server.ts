@@ -6,6 +6,7 @@ import { RootRouter } from "@/routes";
 import { checkDbConnection } from "@/lib/DB.lib";
 import { config } from "@/config/env.config";
 import { CustomError } from "@/utils/CustomError";
+import { IErrorResponse } from "@/types";
 
 const SERVER_PORT = 4000;
 
@@ -21,7 +22,11 @@ export function Start(app: Application) {
 function middlewares(app: Application) {
     app.use(json({ limit: "20mb" }));
     app.use(urlencoded({ extended: true, limit: "20mb" }))
-    app.use(cors());
+    app.use(cors({
+        origin: config.CLIENT_URL,
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+    }));
 }
 
 function Routes(app: Application) {
@@ -31,17 +36,16 @@ function Routes(app: Application) {
 
 
 function ErrorHandler(app: Application) {
-    app.use((err: Error,_req: Request,res: Response,_next: NextFunction) => {
-        if (err instanceof CustomError) {
-           res.status(err.statusCode).json({ error: err.message });
-           return
+
+    app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
+        console.log("this is error ",error)
+        console.log('error', `AuthService ${error.comingFrom}:`, error);
+        if (error instanceof CustomError) {
+            res.status(error.statusCode).json(error.serializeErrors());
         }
-  
-        console.error("Unhandled Error:", err); 
-         res.status(500).json({ error: "Internal Server Error" });
-      }
-    );
-  }
+        next();
+    });
+}
 
 function DbConnections() {
     checkDbConnection(config.MONGODB_URI)

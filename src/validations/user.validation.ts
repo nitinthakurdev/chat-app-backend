@@ -12,5 +12,5 @@ export const UserSchema = z.object({
   email: z.string().email({ message: "Invalid email format" }).nonempty({ message: "Email is required" }),
   password: z.string().nonempty({ message: "Password is required" }),
   refresh_token: z.string().optional(),
-  profilePic: ImageSchema.optional(),
+  profilePic: ImageSchema,
 });

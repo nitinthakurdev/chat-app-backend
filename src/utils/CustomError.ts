@@ -1,25 +1,67 @@
+import { IError } from "@/types";
+import { StatusCodes } from "http-status-codes";
 
-export class CustomError extends Error {
-    statusCode: number;
-  
-    constructor(message: string, statusCode: number = 500) {
-      super(message);
-      this.statusCode = statusCode;
-      Object.setPrototypeOf(this, CustomError.prototype);
+export abstract class CustomError extends Error {
+  abstract statusCode: number;
+  abstract status: string;
+  comingFrom: string;
+
+  constructor(message: string, comingFrom: string) {
+    super(message);
+    this.comingFrom = comingFrom;
+  }
+
+  serializeErrors(): IError {
+    return {
+      message: this.message,
+      statusCode: this.statusCode,
+      status: this.status,
+      comingFrom: this.comingFrom,
     }
   }
-  
-  
-  export class NotFoundError extends CustomError {
-    constructor(message: string = "Resource not found") {
-      super(message, 404);
-    }
+}
+
+export class BadRequestError extends CustomError {
+  statusCode = StatusCodes.BAD_REQUEST;
+  status = 'error';
+
+  constructor(message: string, comingFrom: string) {
+    super(message, comingFrom);
   }
-  
-  
-  export class ValidationError extends CustomError {
-    constructor(message: string = "Validation error") {
-      super(message, 400);
-    }
+}
+
+export class NotFoundError extends CustomError {
+  statusCode = StatusCodes.NOT_FOUND;
+  status = 'error';
+
+  constructor(message: string, comingFrom: string) {
+    super(message, comingFrom);
   }
-  
+}
+
+export class NotAuthorizedError extends CustomError {
+  statusCode = StatusCodes.UNAUTHORIZED;
+  status = 'error';
+
+  constructor(message: string, comingFrom: string) {
+    super(message, comingFrom);
+  }
+}
+
+export class FileTooLargeError extends CustomError {
+  statusCode = StatusCodes.REQUEST_TOO_LONG;
+  status = 'error';
+
+  constructor(message: string, comingFrom: string) {
+    super(message, comingFrom);
+  }
+}
+
+export class ServerError extends CustomError {
+  statusCode = StatusCodes.SERVICE_UNAVAILABLE;
+  status = 'error';
+
+  constructor(message: string, comingFrom: string) {
+    super(message, comingFrom);
+  }
+}
