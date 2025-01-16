@@ -1,15 +1,17 @@
 import { Document, ObjectId } from "mongoose";
 
+export interface IImageSchema {
+  image_Url: string;
+  image_id: string;
+}
+
 
 export interface IUser extends Document {
     username: string;
     email: string;
     password: string;
     refresh_token?: string;
-    profilePic?: {
-      image_Url: string;
-      image_id: string;
-    };
+    profilePic?: IImageSchema;
     isModified: (path: string) => boolean;
   }
 
@@ -35,10 +37,7 @@ export interface IUser extends Document {
     email: string;
     password: string;
     refresh_token?: string;
-    profilePic?: {
-      image_Url?: string;
-      image_id?: string;
-    }; 
+    profilePic?: IImageSchema; 
     createdAt?: Date;
     updatedAt?: Date;
   }
