@@ -1,4 +1,4 @@
-import { IError } from "@/types";
+import { IError } from "@/types/error.types";
 import { StatusCodes } from "http-status-codes";
 
 export abstract class CustomError extends Error {

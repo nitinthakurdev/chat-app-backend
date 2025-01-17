@@ -5,8 +5,9 @@ import { HealthRoute } from "@/controllers/health";
 import { RootRouter } from "@/routes";
 import { checkDbConnection } from "@/lib/DB.lib";
 import { config } from "@/config/env.config";
-import { CustomError } from "@/utils/CustomError";
-import { IErrorResponse } from "@/types";
+import { BadRequestError, CustomError } from "@/utils/CustomError";
+import { IErrorResponse } from "./types/error.types";
+import cookieParser from "cookie-parser";
 
 const SERVER_PORT = 4000;
 
@@ -22,6 +23,7 @@ export function Start(app: Application) {
 function middlewares(app: Application) {
     app.use(json({ limit: "20mb" }));
     app.use(urlencoded({ extended: true, limit: "20mb" }))
+    app.use(cookieParser())
     app.use(cors({
         origin: config.CLIENT_URL,
         credentials: true,
@@ -30,8 +32,11 @@ function middlewares(app: Application) {
 }
 
 function Routes(app: Application) {
-    app.use("/api/v1", RootRouter())
-    app.use("/", HealthRoute)
+    app.use("/api/v1", RootRouter());
+    app.use("/", HealthRoute);
+    app.all("*",(_req:Request,_res:Response,next:NextFunction):void => {
+        next(new BadRequestError("path not found in server","Routes method"))
+    })
 }
 
 

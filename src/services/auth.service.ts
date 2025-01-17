@@ -1,5 +1,5 @@
 import { UserModel } from "@/models/user.models";
-import { IAuthResponse, IImageSchema } from "@/types";
+import { IAuthResponse, IImageSchema } from "@/types/auth.types";
 import { ObjectId } from "mongoose";
 
 export const findByEmailOrUsername = async (value:string):Promise<IAuthResponse | null> => {
@@ -17,7 +17,7 @@ export const UpdateProfile = async(id:ObjectId,imageUrl:IImageSchema):Promise<IA
     return user;
 }
 
-export const UpdateRefreshToken = async(id:ObjectId,refresh_token:string):Promise<IAuthResponse | null> => {
+export const UpdateRefreshToken = async(id:ObjectId,refresh_token:string | null):Promise<IAuthResponse | null> => {
     const data:IAuthResponse = await UserModel.findByIdAndUpdate(id,{refresh_token}).exec() as IAuthResponse;
     return data
 }
