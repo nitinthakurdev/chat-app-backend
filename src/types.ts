@@ -32,7 +32,7 @@ export interface IUser extends Document {
   }
 
   export interface IAuthResponse {
-    _id:string | ObjectId;
+    _id:ObjectId;
     username: string;
     email: string;
     password: string;

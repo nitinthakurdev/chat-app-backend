@@ -7,3 +7,9 @@ export const UserSchema = z.object({
   password: z.string().min(4,{message:"Password must be minimum 4 characters"}).max(12,{message:"Password at least 12 characters"}).nonempty({ message: "Password is required" }),
   refresh_token: z.string().optional(),
 });
+
+
+export const LoginSchema = z.object({
+  username: z.string().trim().nonempty({message:"username is required"}),
+  password: z.string().min(4,{message:"Password must be minimum 4 characters"}).max(12,{message:"Password at least 12 characters"}).nonempty({ message: "Password is required" })
+})
