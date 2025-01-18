@@ -5,19 +5,18 @@ const messageSchema = new Schema({
     sender_id:{
         type:Schema.Types.ObjectId,
         ref:"User",
-        trim:true,
         required:true
     },
     receiver_id:{
         type:Schema.Types.ObjectId,
         ref:"User",
-        trim:true,
         required:true
     },
     text:{
         type:String,
+        trim:true,
     },
     image:ImageSchema
-});
+},{timestamps:true});
 
 export const MessageModel = model("Message",messageSchema);

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, getLoginUser, loginUser, logoutUser, updateProfile } from "@/controllers/auth.controller";
+import { createUser, getAllUser, getLoginUser, loginUser, logoutUser, updateProfile } from "@/controllers/auth.controller";
 import upload from "@/middleware/multer.middleware";
 import { UserLoginValidation, UserValidation } from "@/helpers/healper";
 import { Authentication } from "@/middleware/authentication";
@@ -14,6 +14,7 @@ export const AuthRoutes = () => {
     router.route("/logout").get(Authentication,logoutUser);
     router.route("/update-profile").patch(Authentication,upload.single("image"),updateProfile);
     router.route("/login-user").get(Authentication,getLoginUser);
+    router.route("/all-users").get(Authentication,getAllUser);
 
     return router;
 };

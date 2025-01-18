@@ -15,7 +15,7 @@ const UserSchema = new Schema<IUser>({
   password: { type: String, required: true },
   refresh_token: { type: String },
   profilePic: ImageSchema,
-});
+},{timestamps:true});
 
 UserSchema.pre("save", async function (next) {
   const user = this as IUser; 

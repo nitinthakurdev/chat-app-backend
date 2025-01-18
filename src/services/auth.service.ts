@@ -8,7 +8,7 @@ export const findByEmailOrUsername = async (value:string):Promise<IAuthResponse 
 };
 
 export const findById = async (id:ObjectId):Promise<IAuthResponse | null> => {
-    const user = await UserModel.findById(id).exec() as IAuthResponse;
+    const user = await UserModel.findById(id).select("-password").exec() as IAuthResponse;
     return user
 }
 
@@ -24,5 +24,10 @@ export const UpdateProfile = async(id:ObjectId,profilePic:IImageSchema):Promise<
 
 export const UpdateRefreshToken = async(id:ObjectId,refresh_token:string | null):Promise<IAuthResponse | null> => {
     const data = await UserModel.findByIdAndUpdate(id,{refresh_token}).exec() as IAuthResponse;
+    return data
+}
+
+export const getUsers = async(id:ObjectId):Promise<IAuthResponse[] | []> => {
+    const data = await UserModel.find({_id:{$ne:id}}).select("-password").exec() as IAuthResponse[];
     return data
 }

@@ -1,4 +1,4 @@
-import { CreateUser, findByEmailOrUsername, findById, UpdateProfile, UpdateRefreshToken } from "@/services/auth.service";
+import { CreateUser, findByEmailOrUsername, findById, getUsers, UpdateProfile, UpdateRefreshToken } from "@/services/auth.service";
 import { AsyncHandler } from "@/utils/asyncHandler";
 import { BadRequestError, NotAuthorizedError, NotFoundError } from "@/utils/CustomError";
 import { DeleteOnCloudinary, UploadOnCloudinary } from "@/utils/imageUploader";
@@ -134,4 +134,13 @@ const getLoginUser = AsyncHandler(async (req:Request,res:Response):Promise<void>
     })
 })
 
-export { createUser, loginUser, logoutUser, updateProfile,getLoginUser }
+const getAllUser = AsyncHandler(async (req:Request,res:Response):Promise<void> => {
+    const id = req.currentUser?.id as ObjectId;
+    const data = await getUsers(id);
+    res.status(StatusCodes.OK).json({
+        message:"All users",
+        data
+    })
+})
+
+export { createUser, loginUser, logoutUser, updateProfile,getLoginUser,getAllUser }
