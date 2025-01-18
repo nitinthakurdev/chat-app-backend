@@ -7,6 +7,7 @@ import { CookieOptions, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { compare } from "bcryptjs";
 import { config } from "@/config/env.config";
+import { ObjectId } from "mongoose";
 
 const options: CookieOptions = {
     maxAge: 24 * 60 * 60 * 1000,
@@ -29,7 +30,7 @@ const createUser = AsyncHandler(async (req: Request, res: Response): Promise<voi
     };
 
     const profilePic = await UploadOnCloudinary(file?.path as string);
-    const refresh_token = RefreshToken(data.email);
+    const refresh_token = RefreshToken({email:data.email});
     const result = await CreateUser({ ...data, profilePic, refresh_token });
 
     const newresult = {
@@ -39,7 +40,7 @@ const createUser = AsyncHandler(async (req: Request, res: Response): Promise<voi
         profilePic: result.profilePic?.image_Url
     }
 
-    const access_token = AccessToken(result._id, result.email)
+    const access_token = AccessToken({id:result._id, email:result.email})
     res.cookie("ajt", access_token, options).cookie("rjt", refresh_token, options)
 
     res.status(StatusCodes.OK).json({
@@ -53,7 +54,7 @@ const createUser = AsyncHandler(async (req: Request, res: Response): Promise<voi
 const loginUser = AsyncHandler(async (req: Request, res: Response): Promise<void> => {
     const { username, password } = req.body as { username: string; password: string };
 
-    const user = await findByEmailOrUsername(username)
+    const user = await findByEmailOrUsername(username);
     if (!user) {
         throw new NotFoundError("User Not Exist", "loginUser method")
     }
@@ -63,7 +64,7 @@ const loginUser = AsyncHandler(async (req: Request, res: Response): Promise<void
         throw new BadRequestError("Wrong password try again...", "loginUser method")
     }
 
-    const refresh_token = RefreshToken(user.email)
+    const refresh_token = RefreshToken({email:user.email})
     await UpdateRefreshToken(user._id, refresh_token)
     const data = {
         username: user.username,
@@ -71,7 +72,7 @@ const loginUser = AsyncHandler(async (req: Request, res: Response): Promise<void
         profilePic: user.profilePic?.image_Url
     }
 
-    const access_token = AccessToken(user._id, user.email)
+    const access_token = AccessToken({id:user._id, email:user.email})
     res.cookie("ajt", access_token, options).cookie("rjt", refresh_token, options)
     res.status(StatusCodes.OK).json({
         message: "Login successful",
@@ -83,7 +84,7 @@ const loginUser = AsyncHandler(async (req: Request, res: Response): Promise<void
 })
 
 const logoutUser = AsyncHandler(async (req: Request, res: Response): Promise<void> => {
-    await UpdateRefreshToken(req?.currentUser.id, null)
+    await UpdateRefreshToken(req?.currentUser?.id as ObjectId, null)
     res.clearCookie("ajt").clearCookie("rjt").status(StatusCodes.OK).json({
         message: "Logout Successful"
     })
