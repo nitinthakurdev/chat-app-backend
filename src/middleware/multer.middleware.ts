@@ -4,7 +4,7 @@ import path from 'path';
 import {v4 as uuidv4} from "uuid";
 
 const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
+  destination: (_req, _file, cb) => {   
     cb(null, './public/temp'); 
   },
   filename: (_req, file:Express.Multer.File, cb) => {

@@ -6,5 +6,7 @@ export interface IMessageResponse {
     sender_id: ObjectId,
     receiver_id: ObjectId,
     text?: string,
-    image?: IImageSchema
+    image?: IImageSchema | null,
+    createdAt?: Date;
+    updatedAt?: Date;
 }

@@ -31,8 +31,8 @@ function middlewares(app: Application) {
     }));
 }
 
-function Routes(app: Application) {
-    app.use("/api/v1", RootRouter());
+async function Routes(app: Application) {
+    app.use("/api/v1",await RootRouter());
     app.use("/health", HealthRoute);
     app.all("*",(_req:Request,_res:Response,next:NextFunction):void => {
         next(new BadRequestError("path not found in server","Routes method"))

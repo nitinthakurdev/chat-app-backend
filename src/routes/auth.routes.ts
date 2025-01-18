@@ -7,7 +7,7 @@ import { Authentication } from "@/middleware/authentication";
 
 const router:Router = Router();
 
-export const AuthRoutes = () => {
+export const AuthRoutes = async ():Promise<Router> => {
 
     router.route("/create").post(upload.single("image"),UserValidation,createUser);
     router.route("/login").post(UserLoginValidation,loginUser);
