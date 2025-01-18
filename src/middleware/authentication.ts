@@ -2,7 +2,7 @@ import { config } from "@/config/env.config";
 import { findByEmailOrUsername } from "@/services/auth.service";
 import { IAuthResponse } from "@/types/auth.types";
 import { IVerfifyJWT } from "@/types/types";
-import { BadRequestError } from "@/utils/CustomError";
+import { NotAuthorizedError } from "@/utils/CustomError";
 import { NextFunction,Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
@@ -11,14 +11,14 @@ export const Authentication = async (req:Request,_res:Response,next:NextFunction
     try {
         const data = req.cookies;
         if(!(data.ajt || data.rjt)){
-            next(new BadRequestError("Not valid user","Authentication method"));
+            next(new NotAuthorizedError("Not valid user","Authentication method"));
         };
 
         const verifyJwt = verify(data.ajt,config.JWT_TOKEN) as IVerfifyJWT;
 
         const user = await findByEmailOrUsername(verifyJwt.email as string) as IAuthResponse;
         if(!user) {
-            next(new BadRequestError("Invalid User please try again","Authentication method"));
+            next(new NotAuthorizedError("Invalid User please try again","Authentication method"));
         };
 
         req.currentUser = {
@@ -29,7 +29,7 @@ export const Authentication = async (req:Request,_res:Response,next:NextFunction
         next();
         
     } catch (error) {
-         next(new BadRequestError("Invalid User please try again","Authentication method 1"))
+         next(new NotAuthorizedError("Invalid User please try again","Authentication method 1"))
     }
    
 };

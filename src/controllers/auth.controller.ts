@@ -1,7 +1,7 @@
-import { CreateUser, findByEmailOrUsername, UpdateRefreshToken } from "@/services/auth.service";
+import { CreateUser, findByEmailOrUsername, findById, UpdateProfile, UpdateRefreshToken } from "@/services/auth.service";
 import { AsyncHandler } from "@/utils/asyncHandler";
-import { BadRequestError, NotFoundError } from "@/utils/CustomError";
-import { UploadOnCloudinary } from "@/utils/imageUploader";
+import { BadRequestError, NotAuthorizedError, NotFoundError } from "@/utils/CustomError";
+import { DeleteOnCloudinary, UploadOnCloudinary } from "@/utils/imageUploader";
 import { AccessToken, RefreshToken } from "@/utils/tokens";
 import { CookieOptions, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -15,6 +15,15 @@ const options: CookieOptions = {
     sameSite: "strict",
     secure: config.NODE_ENV !== "development"
 }
+
+const options2: CookieOptions = {
+    maxAge: 25 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: "strict",
+    secure: config.NODE_ENV !== "development"
+}
+
+
 
 const createUser = AsyncHandler(async (req: Request, res: Response): Promise<void> => {
     const data = req.body;
@@ -30,7 +39,7 @@ const createUser = AsyncHandler(async (req: Request, res: Response): Promise<voi
     };
 
     const profilePic = await UploadOnCloudinary(file?.path as string);
-    const refresh_token = RefreshToken({email:data.email});
+    const refresh_token = RefreshToken({ email: data.email });
     const result = await CreateUser({ ...data, profilePic, refresh_token });
 
     const newresult = {
@@ -40,8 +49,8 @@ const createUser = AsyncHandler(async (req: Request, res: Response): Promise<voi
         profilePic: result.profilePic?.image_Url
     }
 
-    const access_token = AccessToken({id:result._id, email:result.email})
-    res.cookie("ajt", access_token, options).cookie("rjt", refresh_token, options)
+    const access_token = AccessToken({ id: result._id, email: result.email })
+    res.cookie("ajt", access_token, options).cookie("rjt", refresh_token, options2)
 
     res.status(StatusCodes.OK).json({
         message: "test",
@@ -64,7 +73,7 @@ const loginUser = AsyncHandler(async (req: Request, res: Response): Promise<void
         throw new BadRequestError("Wrong password try again...", "loginUser method")
     }
 
-    const refresh_token = RefreshToken({email:user.email})
+    const refresh_token = RefreshToken({ email: user.email })
     await UpdateRefreshToken(user._id, refresh_token)
     const data = {
         username: user.username,
@@ -72,8 +81,8 @@ const loginUser = AsyncHandler(async (req: Request, res: Response): Promise<void
         profilePic: user.profilePic?.image_Url
     }
 
-    const access_token = AccessToken({id:user._id, email:user.email})
-    res.cookie("ajt", access_token, options).cookie("rjt", refresh_token, options)
+    const access_token = AccessToken({ id: user._id, email: user.email })
+    res.cookie("ajt", access_token, options).cookie("rjt", refresh_token, options2)
     res.status(StatusCodes.OK).json({
         message: "Login successful",
         data,
@@ -90,4 +99,39 @@ const logoutUser = AsyncHandler(async (req: Request, res: Response): Promise<voi
     })
 })
 
-export { createUser, loginUser, logoutUser }
+const updateProfile = AsyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const data = req.currentUser;
+    const file = req.file;
+
+    if (!file) {
+        throw new NotFoundError("file not found", "createUser Method");
+    };
+    const user = await findById(data?.id as ObjectId);
+    if(!user){
+        throw new NotFoundError("User not found try again...","updateProfile method");
+    };
+
+    const isImageDelete = await DeleteOnCloudinary(user.profilePic?.image_id as string);
+    if(!isImageDelete) {
+        throw new BadRequestError("Image Id is wrong","updateProfile method")
+    }
+    const profilePic = await UploadOnCloudinary(file?.path as string);
+
+    await UpdateProfile(user._id,profilePic)
+    res.status(StatusCodes.OK).json({
+        message:"Profile Update Successful"
+    })
+})
+
+const getLoginUser = AsyncHandler(async (req:Request,res:Response):Promise<void> => {
+    const user = await findById(req.currentUser?.id as ObjectId)
+    if(!user){
+        throw new NotAuthorizedError("User not Autherize","getLoginUser method")
+    }
+    res.status(StatusCodes.OK).json({
+        message:"data found",
+        user
+    })
+})
+
+export { createUser, loginUser, logoutUser, updateProfile,getLoginUser }
