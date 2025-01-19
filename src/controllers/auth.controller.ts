@@ -38,7 +38,7 @@ const createUser = AsyncHandler(async (req: Request, res: Response): Promise<voi
         throw new BadRequestError("User already exist", "createUser methord");
     };
 
-    const profilePic = await UploadOnCloudinary(file?.path as string);
+    const profilePic = await UploadOnCloudinary(file.path);
     const refresh_token = RefreshToken({ email: data.email });
     const result = await CreateUser({ ...data, profilePic, refresh_token });
 

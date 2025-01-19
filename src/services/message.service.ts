@@ -1,4 +1,5 @@
 import { MessageModel } from "@/models/message.models"
+import { IImageSchema } from "@/types/auth.types"
 import { ObjectId } from "mongoose"
 
 export const getMessages = async(sender_id:ObjectId,receiver_id:ObjectId):Promise<any> => {
@@ -11,4 +12,7 @@ export const getMessages = async(sender_id:ObjectId,receiver_id:ObjectId):Promis
     return messages 
 }
 
-// export const sendMessage = async (sender_id:ObjectId,receiver_id:ObjectId)
+export const sendMessage = async (sender_id:ObjectId,receiver_id:string,text?:string,image?:IImageSchema):Promise<any> => {
+    const message = await MessageModel.create({sender_id,receiver_id,text,image}) ;
+    return message 
+}
