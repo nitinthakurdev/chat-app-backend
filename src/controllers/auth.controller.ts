@@ -8,6 +8,7 @@ import { StatusCodes } from "http-status-codes";
 import { compare } from "bcryptjs";
 import { config } from "@/config/env.config";
 import { ObjectId } from "mongoose";
+import { IImageSchema } from "@/types/auth.types";
 
 const options: CookieOptions = {
     maxAge: 24 * 60 * 60 * 1000,
@@ -27,18 +28,13 @@ const options2: CookieOptions = {
 
 const createUser = AsyncHandler(async (req: Request, res: Response): Promise<void> => {
     const data = req.body;
-    const file = req.file;
-
-    if (!file) {
-        throw new NotFoundError("file not found", "createUser Method");
-    };
 
     const user = await findByEmailOrUsername(data.email);
     if (user) {
         throw new BadRequestError("User already exist", "createUser methord");
     };
 
-    const profilePic = await UploadOnCloudinary(file.path);
+    const profilePic = await UploadOnCloudinary(data.image,true,true);
     const refresh_token = RefreshToken({ email: data.email });
     const result = await CreateUser({ ...data, profilePic, refresh_token });
 
@@ -53,7 +49,7 @@ const createUser = AsyncHandler(async (req: Request, res: Response): Promise<voi
     res.cookie("ajt", access_token, options).cookie("rjt", refresh_token, options2)
 
     res.status(StatusCodes.OK).json({
-        message: "test",
+        message: "User created successful",
         newresult,
         access_token,
         refresh_token
@@ -115,7 +111,7 @@ const updateProfile = AsyncHandler(async (req: Request, res: Response): Promise<
     if(!isImageDelete) {
         throw new BadRequestError("Image Id is wrong","updateProfile method")
     }
-    const profilePic = await UploadOnCloudinary(file?.path as string);
+    const profilePic = await UploadOnCloudinary(file?.path as string) as IImageSchema;
 
     await UpdateProfile(user._id,profilePic)
     res.status(StatusCodes.OK).json({

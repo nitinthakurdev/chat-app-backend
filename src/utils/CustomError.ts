@@ -1,5 +1,6 @@
-import { IError } from "@/types/error.types";
-import { StatusCodes } from "http-status-codes";
+import { IError } from '@/types/error.types';
+import { StatusCodes } from 'http-status-codes';
+
 
 export abstract class CustomError extends Error {
   abstract statusCode: number;
@@ -64,4 +65,12 @@ export class ServerError extends CustomError {
   constructor(message: string, comingFrom: string) {
     super(message, comingFrom);
   }
+}
+
+export interface ErrnoException extends Error {
+  errno?: number;
+  code?: string;
+  path?: string;
+  syscall?: string;
+  stack?: string;
 }

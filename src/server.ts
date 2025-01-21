@@ -12,9 +12,9 @@ import cookieParser from "cookie-parser";
 const SERVER_PORT = 4000;
 
 
-export function Start(app: Application) {
+export async function Start(app: Application) {
     middlewares(app);
-    Routes(app);
+   await Routes(app);
     DbConnections();
     ErrorHandler(app);
     startServer(app);
@@ -25,17 +25,17 @@ function middlewares(app: Application) {
     app.use(urlencoded({ extended: true, limit: "20mb" }))
     app.use(cookieParser())
     app.use(cors({
-        origin: config.CLIENT_URL,
+        origin: `${config.CLIENT_URL}`,
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
     }));
 }
 
 async function Routes(app: Application) {
-    app.use("/api/v1",await RootRouter());
+    app.use("/api/v1", await RootRouter());
     app.use("/health", HealthRoute);
-    app.all("*",(_req:Request,_res:Response,next:NextFunction):void => {
-        next(new BadRequestError("path not found in server","Routes method"))
+    app.all("*", (_req: Request, _res: Response, next: NextFunction): void => {
+        next(new BadRequestError("path not found in server", "Routes method"))
     })
 }
 
@@ -43,11 +43,11 @@ async function Routes(app: Application) {
 function ErrorHandler(app: Application) {
 
     app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
-        console.log("this is error ",error)
-        console.log('error', `AuthService ${error.comingFrom}:`, error);
         if (error instanceof CustomError) {
+            console.log('error', `GatewayService ${error.comingFrom}:`, error);
             res.status(error.statusCode).json(error.serializeErrors());
         }
+
         next();
     });
 }
