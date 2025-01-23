@@ -1,7 +1,7 @@
 import { CreateUser, findByEmailOrUsername, findById, getUsers, UpdateProfile, UpdateRefreshToken } from "@/services/auth.service";
 import { AsyncHandler } from "@/utils/asyncHandler";
 import { BadRequestError, NotAuthorizedError, NotFoundError } from "@/utils/CustomError";
-import { DeleteOnCloudinary, UploadOnCloudinary } from "@/utils/imageUploader";
+import {  UploadOnCloudinary } from "@/utils/imageUploader";
 import { AccessToken, RefreshToken } from "@/utils/tokens";
 import { CookieOptions, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -34,7 +34,7 @@ const createUser = AsyncHandler(async (req: Request, res: Response): Promise<voi
         throw new BadRequestError("User already exist", "createUser methord");
     };
 
-    const profilePic = await UploadOnCloudinary(data.image,true,true);
+    const profilePic = await UploadOnCloudinary(data.image,"",true,true);
     const refresh_token = RefreshToken({ email: data.email });
     const result = await CreateUser({ ...data, profilePic, refresh_token });
 
@@ -97,21 +97,17 @@ const logoutUser = AsyncHandler(async (req: Request, res: Response): Promise<voi
 
 const updateProfile = AsyncHandler(async (req: Request, res: Response): Promise<void> => {
     const data = req.currentUser;
-    const file = req.file;
+    const {image} = req.body;
 
-    if (!file) {
-        throw new NotFoundError("file not found", "createUser Method");
+    if (!image) {
+        throw new NotFoundError("image not found", "createUser Method");
     };
     const user = await findById(data?.id as ObjectId);
     if(!user){
         throw new NotFoundError("User not found try again...","updateProfile method");
     };
 
-    const isImageDelete = await DeleteOnCloudinary(user.profilePic?.image_id as string);
-    if(!isImageDelete) {
-        throw new BadRequestError("Image Id is wrong","updateProfile method")
-    }
-    const profilePic = await UploadOnCloudinary(file?.path as string) as IImageSchema;
+    const profilePic = await UploadOnCloudinary(image,user.profilePic?.image_id as string,true,true) as IImageSchema;
 
     await UpdateProfile(user._id,profilePic)
     res.status(StatusCodes.OK).json({

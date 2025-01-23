@@ -10,7 +10,7 @@ export const AuthRoutes = async ():Promise<Router> => {
 
     router.route("/create").post(UserValidation,createUser);
     router.route("/login").post(UserLoginValidation,loginUser);
-    router.route("/logout").get(Authentication,logoutUser);
+    router.route("/logout").post(Authentication,logoutUser);
     router.route("/update-profile").patch(Authentication,updateProfile);
     router.route("/login-user").get(Authentication,getLoginUser);
     router.route("/all-users").get(Authentication,getAllUser);

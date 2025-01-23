@@ -1,7 +1,6 @@
 import { config } from '@/config/env.config';
 import { IImageSchema } from '@/types/auth.types';
 import { v2 as cloudinary } from 'cloudinary';
-import fs from "fs"
 
 cloudinary.config({
     cloud_name: config.CLOUDINARY_NAME,
@@ -9,10 +8,10 @@ cloudinary.config({
     api_secret: config.CLOUDINARY_SECRET
 });
 
-const UploadOnCloudinary = async (localFilePath: string,overwrite?:boolean,invalidate?:boolean):Promise<IImageSchema | null> => {
+const UploadOnCloudinary = async (localFilePath: string,public_id?:string,overwrite?:boolean,invalidate?:boolean):Promise<IImageSchema | null> => {
     try {
         if (!localFilePath) return null
-        const res = await cloudinary.uploader.upload(localFilePath, {overwrite,invalidate, resource_type: "auto" })
+        const res = await cloudinary.uploader.upload(localFilePath, {public_id,overwrite,invalidate, resource_type: "auto" })
         const resData:IImageSchema = {
             image_Url:res.secure_url,
             image_id:res.public_id,
