@@ -1,4 +1,5 @@
 import { getMessages, sendMessage } from "@/services/message.service";
+import { IImageSchema } from "@/types/auth.types";
 import { AsyncHandler } from "@/utils/asyncHandler";
 import { UploadOnCloudinary } from "@/utils/imageUploader";
 import { Request, Response } from "express";
@@ -19,12 +20,10 @@ const getUserMessages = AsyncHandler(async (req:Request,res:Response):Promise<vo
 const sendUserMessage = AsyncHandler(async (req:Request,res:Response):Promise<void> => {
     const receiver_id = req.params.id;
     const sender_id = req.currentUser?.id as ObjectId;
-    const {text} = req.body ;
-    const file = req.file;
-    let image ;
-    if(file){
-        image = await UploadOnCloudinary(file.path)
-    }
+    const {text,img} = req.body ;
+
+    const image = await UploadOnCloudinary(img,"",true,true) as IImageSchema;
+   
     const result = await sendMessage(sender_id,receiver_id,text,image)
 
      res.status(StatusCodes.OK).json({
