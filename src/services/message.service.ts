@@ -8,7 +8,7 @@ export const getMessages = async(sender_id:ObjectId,receiver_id:ObjectId):Promis
             {sender_id,receiver_id},
             {sender_id:receiver_id,receiver_id:sender_id}
         ]
-    }).exec() 
+    }).exec()
     return messages 
 }
 
