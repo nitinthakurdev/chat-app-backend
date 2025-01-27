@@ -8,15 +8,17 @@ import { config } from '@/config/env.config';
 import { BadRequestError, CustomError } from '@/utils/CustomError';
 import { IErrorResponse } from './types/error.types';
 import cookieParser from 'cookie-parser';
+import { Server } from 'socket.io';
 
 const SERVER_PORT = 4000;
+let SocketIo:Server ;
 
-export async function Start(app: Application) {
+async function Start(app: Application) {
   middlewares(app);
   await Routes(app);
   DbConnections();
   ErrorHandler(app);
-  startServer(app);
+  await startServer(app);
 }
 
 function middlewares(app: Application) {
@@ -55,8 +57,38 @@ function DbConnections() {
   checkDbConnection(config.MONGODB_URI);
 }
 
-function startServer(app: Application) {
+async function startServer(app: Application) {
   const server: http.Server = http.createServer(app);
+  const io = await socketIOConnections(server);
+  SocketIo = io;
   server.listen(SERVER_PORT);
-  console.log(`Server is up and running on Port : ${SERVER_PORT}`);
+  console.log("Server is up and running on Port : %d",SERVER_PORT)
 }
+
+async function socketIOConnections (httpserver:http.Server):Promise<Server> {
+  const io:Server = new Server(httpserver,{
+    cors:{
+      origin:"*",
+      methods:['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+    }
+  })
+
+  const userSocketMap = new Map<string, string>();
+
+  io.on("connection",(socket)=>{
+    console.log("A user Socket connected id is : %s",socket.id);
+    const userId = socket.handshake.query.userId as string;
+    if(userId)  userSocketMap.set(userId, socket.id);
+  })
+
+  io.emit("getOnlineUser",Object.keys(userSocketMap))
+
+  io.on("disconnect",(reason)=>{
+    console.log("A user Socket disconneted",reason)
+  })
+
+  return io
+}
+
+
+export {Start,SocketIo}
