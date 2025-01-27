@@ -1,7 +1,6 @@
-import { LoginSchema, UserSchema } from "@/validations/user.validation";
-import { validater } from "./validater.helper";
+import { LoginSchema, UserSchema } from '@/validations/user.validation';
+import { validater } from './validater.helper';
 
-
-// auth validations 
+// auth validations
 export const UserValidation = validater(UserSchema);
 export const UserLoginValidation = validater(LoginSchema);

@@ -17,3 +17,5 @@ coverage/
 # Ignore specific directories
 # scripts/
 # src/generated/
+
+.env

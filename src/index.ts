@@ -1,9 +1,9 @@
-import express, { type Application } from "express";
-import { Start } from "@/server";
+import express, { type Application } from 'express';
+import { Start } from '@/server';
 
 function Initlization() {
-    const app: Application = express();
-    Start(app)
+  const app: Application = express();
+  Start(app);
 }
 
-Initlization()
+Initlization();

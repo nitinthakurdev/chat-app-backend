@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-export const HealthRoute = (_req:Request,res:Response) => {
-    res.send("server is healthy and ok")
-}
+export const HealthRoute = (_req: Request, res: Response) => {
+  res.send('server is healthy and ok');
+};

@@ -1,46 +1,45 @@
 {
-    "env": {
-      "node": true,
-      "es2022": true
-    },
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "ecmaVersion": 2022,
-      "sourceType": "module",
-      "project": "./tsconfig.json"
-    },
-    "plugins": ["@typescript-eslint", "import"],
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:@typescript-eslint/recommended-requiring-type-checking",
-      "plugin:import/recommended",
-      "plugin:import/typescript",
-      "prettier"
-    ],
-    "rules": {
-      "no-console": "warn", // Warn on console statements
-      "no-unused-vars": "off", // Handled by TypeScript
-      "@typescript-eslint/no-unused-vars": ["error"],
-      "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
-      "@typescript-eslint/no-explicit-any": "error",
-      "@typescript-eslint/no-floating-promises": "error",
-      "@typescript-eslint/strict-boolean-expressions": "warn",
-      "import/order": [
-        "error",
-        {
-          "groups": [["builtin", "external"], "internal", ["parent", "sibling"], "index"],
-          "newlines-between": "always",
-          "alphabetize": { "order": "asc", "caseInsensitive": true }
-        }
-      ],
-      "import/no-unresolved": "off" // Prevent errors for TypeScript paths
-    },
-    "settings": {
-      "import/resolver": {
-        "typescript": {} // Use TypeScript's paths and extensions
+  "env": {
+    "node": true,
+    "es2022": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint", "import"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "prettier"
+  ],
+  "rules": {
+    "no-console": "warn", // Warn on console statements
+    "no-unused-vars": "off", // Handled by TypeScript
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/strict-boolean-expressions": "warn",
+    "import/order": [
+      "error",
+      {
+        "groups": [["builtin", "external"], "internal", ["parent", "sibling"], "index"],
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
       }
-    },
-    "ignorePatterns": ["node_modules", "build", "*.js"]
-  }
-  
+    ],
+    "import/no-unresolved": "off" // Prevent errors for TypeScript paths
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {} // Use TypeScript's paths and extensions
+    }
+  },
+  "ignorePatterns": ["node_modules", "build", "*.js"]
+}

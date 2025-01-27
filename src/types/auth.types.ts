@@ -1,11 +1,10 @@
-import { Document, ObjectId } from "mongoose";
+import { Document, ObjectId } from 'mongoose';
 
 export interface IImageSchema {
   _id?: ObjectId;
   image_Url: string;
   image_id: string;
 }
-
 
 export interface IUser extends Document {
   username: string;

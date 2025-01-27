@@ -1,7 +1,6 @@
 import { IError } from '@/types/error.types';
 import { StatusCodes } from 'http-status-codes';
 
-
 export abstract class CustomError extends Error {
   abstract statusCode: number;
   abstract status: string;
@@ -18,7 +17,7 @@ export abstract class CustomError extends Error {
       statusCode: this.statusCode,
       status: this.status,
       comingFrom: this.comingFrom,
-    }
+    };
   }
 }
 
