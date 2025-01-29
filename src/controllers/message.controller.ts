@@ -1,3 +1,4 @@
+import { SocketIo } from '@/server';
 import { getMessages, sendMessage } from '@/services/message.service';
 import { IImageSchema } from '@/types/auth.types';
 import { AsyncHandler } from '@/utils/asyncHandler';
@@ -25,6 +26,8 @@ const sendUserMessage = AsyncHandler(async (req: Request, res: Response): Promis
   const image = (await UploadOnCloudinary(img, '', true, true)) as IImageSchema;
 
   const result = await sendMessage(sender_id, receiver_id, text, image);
+
+  SocketIo.to(receiver_id).emit("newMessage",result)
 
   res.status(StatusCodes.OK).json({
     message: 'Message Send',

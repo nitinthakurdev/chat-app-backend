@@ -9,11 +9,12 @@ import { BadRequestError, CustomError } from '@/utils/CustomError';
 import { IErrorResponse } from './types/error.types';
 import cookieParser from 'cookie-parser';
 import { Server } from 'socket.io';
+import { socketIOConnections } from '@/socketIo';
 
 const SERVER_PORT = 4000;
 let SocketIo:Server ;
 
-async function Start(app: Application) {
+export async function Start(app: Application):Promise<void> {
   middlewares(app);
   await Routes(app);
   DbConnections();
@@ -21,7 +22,7 @@ async function Start(app: Application) {
   await startServer(app);
 }
 
-function middlewares(app: Application) {
+function middlewares(app: Application):void {
   app.use(json({ limit: '20mb' }));
   app.use(urlencoded({ extended: true, limit: '20mb' }));
   app.use(cookieParser());
@@ -34,7 +35,7 @@ function middlewares(app: Application) {
   );
 }
 
-async function Routes(app: Application) {
+async function Routes(app: Application):Promise<void> {
   app.use('/api/v1', await RootRouter());
   app.use('/health', HealthRoute);
   app.all('*', (_req: Request, _res: Response, next: NextFunction): void => {
@@ -42,7 +43,7 @@ async function Routes(app: Application) {
   });
 }
 
-function ErrorHandler(app: Application) {
+function ErrorHandler(app: Application):void {
   app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
     if (error instanceof CustomError) {
       console.log('error', `GatewayService ${error.comingFrom}:`, error);
@@ -53,11 +54,11 @@ function ErrorHandler(app: Application) {
   });
 }
 
-function DbConnections() {
+function DbConnections():void {
   checkDbConnection(config.MONGODB_URI);
 }
 
-async function startServer(app: Application) {
+async function startServer(app: Application):Promise<void> {
   const server: http.Server = http.createServer(app);
   const io = await socketIOConnections(server);
   SocketIo = io;
@@ -65,30 +66,6 @@ async function startServer(app: Application) {
   console.log("Server is up and running on Port : %d",SERVER_PORT)
 }
 
-async function socketIOConnections (httpserver:http.Server):Promise<Server> {
-  const io:Server = new Server(httpserver,{
-    cors:{
-      origin:"*",
-      methods:['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
-    }
-  })
-
-  const userSocketMap = new Map<string, string>();
-
-  io.on("connection",(socket)=>{
-    console.log("A user Socket connected id is : %s",socket.id);
-    const userId = socket.handshake.query.userId as string;
-    if(userId)  userSocketMap.set(userId, socket.id);
-  })
-
-  io.emit("getOnlineUser",Object.keys(userSocketMap))
-
-  io.on("disconnect",(reason)=>{
-    console.log("A user Socket disconneted",reason)
-  })
-
-  return io
-}
 
 
-export {Start,SocketIo}
+export {SocketIo}
