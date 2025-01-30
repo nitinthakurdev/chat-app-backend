@@ -27,7 +27,7 @@ const sendUserMessage = AsyncHandler(async (req: Request, res: Response): Promis
 
   const result = await sendMessage(sender_id, receiver_id, text, image);
 
-  SocketIo.to(receiver_id).emit("newMessage",result)
+  SocketIo.emit("newMessage",result)
 
   res.status(StatusCodes.OK).json({
     message: 'Message Send',

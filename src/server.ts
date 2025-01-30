@@ -14,7 +14,7 @@ import { socketIOConnections } from '@/socketIo';
 const SERVER_PORT = 4000;
 let SocketIo:Server ;
 
-export async function Start(app: Application):Promise<void> {
+ async function Start(app: Application):Promise<void> {
   middlewares(app);
   await Routes(app);
   DbConnections();
@@ -68,4 +68,4 @@ async function startServer(app: Application):Promise<void> {
 
 
 
-export {SocketIo}
+export {Start, SocketIo}

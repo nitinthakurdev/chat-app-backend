@@ -12,10 +12,7 @@ export async function socketIOConnections(httpserver: http.Server): Promise<Serv
     
     io.on("connection", (socket) => {
         console.log("A user Socket connected id is : %s", socket.id);
-        socket.emit("test", "test")
     })
-
-
 
     io.on("disconnect", (reason) => {
         console.log("A user Socket disconneted", reason)
