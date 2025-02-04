@@ -9,9 +9,18 @@ export async function socketIOConnections(httpserver: http.Server): Promise<Serv
     },
   });
 
+let OnlineUsers:Record<string, string> = {};
+
   io.on('connection', (socket) => {
     console.log('A user Socket connected id is : %s', socket.id);
+
+    socket.on("loginUsers",(data)=>{
+      OnlineUsers[data] = socket.id
+    })
+
+    socket.emit("onlineUsers",OnlineUsers)
   });
+
 
   io.on('disconnect', (reason) => {
     console.log('A user Socket disconneted', reason);
