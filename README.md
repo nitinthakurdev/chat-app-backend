@@ -1,5 +1,5 @@
 
-# Welcome 🖐️ To My Chat App Frontend
+# Welcome 🖐️ To My Chat App Backend
 
 A real-time chat application built using React, Node.js, and Socket.IO for seamless communication. This app allows users to send and receive messages in real-time, with support for private and group chats.
 
