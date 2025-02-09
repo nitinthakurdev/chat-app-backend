@@ -1,5 +1,5 @@
 import { SocketIo } from '@/server';
-import { getMessages, sendMessage } from '@/services/message.service';
+import { GetGroupChat, getMessages, sendMessage } from '@/services/message.service';
 import { IImageSchema } from '@/types/auth.types';
 import { AsyncHandler } from '@/utils/asyncHandler';
 import { UploadOnCloudinary } from '@/utils/imageUploader';
@@ -35,4 +35,14 @@ const sendUserMessage = AsyncHandler(async (req: Request, res: Response): Promis
   });
 });
 
-export { getUserMessages, sendUserMessage };
+const getGroupChat = AsyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const sender_id = req.currentUser?.id;
+  const group_id = req.params.id;
+  const messages = await GetGroupChat(sender_id as ObjectId, group_id as unknown as ObjectId);
+  res.status(StatusCodes.OK).json({
+    message: 'messages',
+    data: messages,
+  });
+});
+
+export { getUserMessages, sendUserMessage,getGroupChat };

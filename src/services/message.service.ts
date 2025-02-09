@@ -12,6 +12,16 @@ export const getMessages = async (sender_id: ObjectId, receiver_id: ObjectId): P
   return messages;
 };
 
+export const GetGroupChat = async(sender_id: ObjectId, group_id: ObjectId): Promise<any> => {
+  const messages = await MessageModel.find({
+    $or: [
+      { sender_id, receiver_id:group_id },
+      {  receiver_id:group_id },
+    ],
+  }).exec();
+  return messages;
+}
+
 export const sendMessage = async (sender_id: ObjectId, receiver_id: string, text?: string, image?: IImageSchema): Promise<any> => {
   const message = await MessageModel.create({ sender_id, receiver_id, text, image });
   return message;
