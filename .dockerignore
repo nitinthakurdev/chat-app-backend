@@ -1,11 +1,9 @@
 node_modules
-bun.lockb
 bun-cache
 .git
 .gitignore
 Dockerfile
 .dockerignore
-.env
 logs
 npm-debug.log
 yarn-error.log

@@ -4,19 +4,19 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --watch  src/index.ts",
-    "start": "bun run build && bun build/index.js",
+    "start": "bun run build/index.js",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "build": "bunx tsc && bun build src/index.ts --outdir dist"
+    "build": "bunx tsc && bun build src/index.ts "
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/bun": "latest",
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",
-    "@types/jsonwebtoken": "^9.0.7",
+    "@types/jsonwebtoken": "^9.0.8",
     "@types/mongoose": "^5.11.97",
     "@types/multer": "^1.4.12",
     "@typescript-eslint/eslint-plugin": "^8.19.1",
