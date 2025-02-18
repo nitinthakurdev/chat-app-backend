@@ -9,7 +9,7 @@
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "build": "tsc"
+    "build": "bunx tsc && bun build src/index.ts --outdir dist"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
