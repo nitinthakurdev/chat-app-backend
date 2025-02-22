@@ -1,5 +1,5 @@
-import { getGroupChat, getUserMessages, sendUserMessage } from '@/controllers/message.controller';
-import { Authentication } from '@/middleware/authentication';
+import { getGroupChat, getUserMessages, sendUserMessage } from '../controllers/message.controller';
+import { Authentication } from '../middleware/authentication';
 import { Router } from 'express';
 const routes = Router();
 export const MessageRouter = async () => {

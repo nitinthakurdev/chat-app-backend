@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { AuthRoutes } from '@/routes/auth.routes';
-import { MessageRouter } from '@/routes/message.routes';
+import { AuthRoutes } from '../routes/auth.routes';
+import { MessageRouter } from '../routes/message.routes';
 import { GroupRouter } from './group.routes';
 const router = Router();
 export const RootRouter = async () => {

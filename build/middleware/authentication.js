@@ -1,6 +1,6 @@
-import { config } from '@/config/env.config';
-import { findByEmailOrUsername } from '@/services/auth.service';
-import { NotAuthorizedError } from '@/utils/CustomError';
+import { config } from '../config/env.config';
+import { findByEmailOrUsername } from '../services/auth.service';
+import { NotAuthorizedError } from '../utils/CustomError';
 import { verify } from 'jsonwebtoken';
 export const Authentication = async (req, _res, next) => {
     try {

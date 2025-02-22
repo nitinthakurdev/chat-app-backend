@@ -1,13 +1,13 @@
 import { json, urlencoded } from 'express';
 import http from 'http';
 import cors from 'cors';
-import { HealthRoute } from '@/controllers/health';
-import { RootRouter } from '@/routes';
-import { checkDbConnection } from '@/lib/DB.lib';
-import { config } from '@/config/env.config';
-import { BadRequestError, CustomError } from '@/utils/CustomError';
+import { HealthRoute } from './controllers/health';
+import { RootRouter } from './routes';
+import { checkDbConnection } from './lib/DB.lib';
+import { config } from './config/env.config';
+import { BadRequestError, CustomError } from './utils/CustomError';
 import cookieParser from 'cookie-parser';
-import { socketIOConnections } from '@/socketIo';
+import { socketIOConnections } from './socketIo';
 const SERVER_PORT = 4000;
 let SocketIo;
 async function Start(app) {

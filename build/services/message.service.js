@@ -1,4 +1,4 @@
-import { MessageModel } from '@/models/message.models';
+import { MessageModel } from '../models/message.models';
 export const getMessages = async (sender_id, receiver_id) => {
     const messages = await MessageModel.find({
         $or: [

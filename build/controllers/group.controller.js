@@ -1,7 +1,7 @@
-import { createGroup, getGroupByAdminAndName, getGroupById } from "@/services/group.service";
-import { AsyncHandler } from "@/utils/asyncHandler";
-import { BadRequestError } from "@/utils/CustomError";
-import { UploadOnCloudinary } from "@/utils/imageUploader";
+import { createGroup, getGroupByAdminAndName, getGroupById } from "../services/group.service";
+import { AsyncHandler } from "../utils/asyncHandler";
+import { BadRequestError } from "../utils/CustomError";
+import { UploadOnCloudinary } from "../utils/imageUploader";
 import { StatusCodes } from "http-status-codes";
 const CreateGroup = AsyncHandler(async (req, res) => {
     const data = req.body;

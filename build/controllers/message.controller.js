@@ -1,7 +1,7 @@
-import { SocketIo } from '@/server';
-import { GetGroupChat, getMessages, sendMessage } from '@/services/message.service';
-import { AsyncHandler } from '@/utils/asyncHandler';
-import { UploadOnCloudinary } from '@/utils/imageUploader';
+import { SocketIo } from '../server';
+import { GetGroupChat, getMessages, sendMessage } from '../services/message.service';
+import { AsyncHandler } from '../utils/asyncHandler';
+import { UploadOnCloudinary } from '../utils/imageUploader';
 import { StatusCodes } from 'http-status-codes';
 const getUserMessages = AsyncHandler(async (req, res) => {
     const senderid = req.currentUser?.id;

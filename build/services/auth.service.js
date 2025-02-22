@@ -1,4 +1,4 @@
-import { UserModel } from '@/models/user.models';
+import { UserModel } from '../models/user.models';
 export const findByEmailOrUsername = async (value) => {
     const data = (await UserModel.findOne({ $or: [{ email: value }, { username: value }] }).exec());
     return data;

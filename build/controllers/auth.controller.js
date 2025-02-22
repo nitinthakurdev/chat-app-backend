@@ -1,11 +1,11 @@
-import { CreateUser, findByEmailOrUsername, findById, getUsers, UpdateProfile, UpdateRefreshToken } from '@/services/auth.service';
-import { AsyncHandler } from '@/utils/asyncHandler';
-import { BadRequestError, NotAuthorizedError, NotFoundError } from '@/utils/CustomError';
-import { UploadOnCloudinary } from '@/utils/imageUploader';
-import { AccessToken, RefreshToken } from '@/utils/tokens';
+import { CreateUser, findByEmailOrUsername, findById, getUsers, UpdateProfile, UpdateRefreshToken } from '../services/auth.service';
+import { AsyncHandler } from '../utils/asyncHandler';
+import { BadRequestError, NotAuthorizedError, NotFoundError } from '../utils/CustomError';
+import { UploadOnCloudinary } from '../utils/imageUploader';
+import { AccessToken, RefreshToken } from '../utils/tokens';
 import { StatusCodes } from 'http-status-codes';
 import { compare } from 'bcryptjs';
-import { config } from '@/config/env.config';
+import { config } from '../config/env.config';
 const options = {
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,

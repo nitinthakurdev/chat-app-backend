@@ -1,4 +1,4 @@
-import { GroupModel } from "@/models/Groups.models";
+import { GroupModel } from "../models/Groups.models";
 export const createGroup = async (data) => {
     const result = (await GroupModel.create(data));
     return result;

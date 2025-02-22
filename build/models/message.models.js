@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { ImageSchema } from '@/models/user.models';
+import { ImageSchema } from '../models/user.models';
 const messageSchema = new Schema({
     sender_id: {
         type: Schema.Types.ObjectId,

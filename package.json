@@ -9,7 +9,7 @@
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "build": "bunx tsc && bun build src/index.ts "
+    "build": "bunx tsc && bunx tsc-alias"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -24,7 +24,8 @@
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "tsc-alias": "^1.8.10"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
