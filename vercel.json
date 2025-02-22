@@ -1,8 +1,5 @@
 {
     "version": 2,
-    "framework": {
-      "name": "vercel-node"
-    },
     "builds": [
       {
         "src": "build/index.js",
