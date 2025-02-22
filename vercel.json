@@ -1,9 +1,15 @@
 {
     "version": 2,
+    "framework": {
+      "name": "vercel-node"
+    },
     "builds": [
       {
         "src": "build/index.js",
-        "use": "@vercel/bun"
+        "use": "@vercel/bun",
+        "config": {
+        "runtime": "bun"
+      }
       }
     ],
     "routes": [
